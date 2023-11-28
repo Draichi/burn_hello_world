@@ -10,4 +10,12 @@ use burn::{
 };
 
 #[derive(Module, Debug)]
-pub struct Model<B: Backend> {}
+pub struct Model<B: Backend> {
+    conv1: Conv2d<B>,
+    conv2: Conv2d<B>,
+    pool: AdaptiveAvgPool2d,
+    dropout: Dropout,
+    linear1: Linear<B>,
+    linear2: Linear<B>,
+    activation: ReLU,
+}
