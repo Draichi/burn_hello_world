@@ -19,3 +19,26 @@ pub struct Model<B: Backend> {
     linear2: Linear<B>,
     activation: ReLU,
 }
+
+#[derive(Config, Debug)]
+pub struct ModelConfig{
+    num_classes: usize,
+    hidden_size: usize,
+    #[config(default="0.5")]
+    dropout: f64,
+}
+
+impl ModelConfig {
+    /// Returns the initialized model.
+    pub fn init<B: Backend>(&self) -> Model<B> {
+        Model {
+            conv1: Conv2dConfig::new([1, 8], [3, 3]).init(),
+            conv2: Conv2dConfig::new([8, 16], [3, 3]).init(),
+            pool: AdaptiveAvgPool2dConfig::new([8, 8]).init(),
+            activation: ReLU::new(),
+            linear1: LinearConfig::new(16 * 8 * 8, self.hidden_size).init(),
+            linear2: LinearConfig::new(self.hidden_size, self.num_classes).init(),
+            dropout: DropoutConfig::new(self.dropout).init(),
+        }
+    }
+}
