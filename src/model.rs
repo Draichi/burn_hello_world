@@ -6,7 +6,8 @@ use burn::{
         pool::{AdaptiveAvgPool2d, AdaptiveAvgPool2dConfig},
         Dropout, DropoutConfig, Linear, LinearConfig, ReLU,
     },
-    tensor::{backend::Backend, Tensor},
+    data::{dataloader::batcher::Batcher, dataset::source::huggingface::MNISTItem},
+    tensor::{backend::Backend, Tensor, Data, ElementConversion, Int},
 };
 
 #[derive(Module, Debug)]
@@ -26,6 +27,17 @@ pub struct ModelConfig{
     hidden_size: usize,
     #[config(default="0.5")]
     dropout: f64,
+}
+
+pub struct MNISTBatcher<B: Backend> {
+    device: B::Device,
+}
+
+
+impl<B: Backend> MNISTBatcher<B> {
+    pub fn new(device: B::Device) -> Self {
+        Self { device }
+    }
 }
 
 impl ModelConfig {
