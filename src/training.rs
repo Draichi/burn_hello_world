@@ -1,3 +1,13 @@
+use crate::model::Model;
+use burn::train::ClassificationOutput;
+use burn::{
+    tensor::{
+        backend::Backend,
+        Tensor, Int
+    },
+    nn::loss::CrossEntropyLoss
+};
+
 impl<B: Backend> Model<B> {
     pub fn forward_classification(
         &self,
